@@ -1,10 +1,17 @@
-Set-Alias -Name 7zip -Value "C:\Program Files\7-Zip\7z.exe"
-$username = $env:USERNAME
+#Options
+[CmdletBinding()]
+param (
+    [Parameter()]
+    #The default output folder is this
+    [String]$Output = "C:\Users\$env:USERNAME\Minecraft Backups\"
+)
 
-$minecraft_worlds_folder = "C:\Users\$username\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftWorlds"
+Set-Alias -Name 7zip -Value "C:\Program Files\7-Zip\7z.exe"
+
+$minecraft_worlds_folder = "C:\Users\$env:USERNAME\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftWorlds"
 
 $date =  Get-Date -Format "dd-MM-yyyy"
-$output_filename = "Pichichi-$date.7z"
+$output_filename = "$Output\Pichichi-$date.7z"
 
 Write-Host -ForegroundColor Green "Compressing the World..."
 7zip a -t7z $output_filename "$minecraft_worlds_folder\HqG5YEinEgA=" -mx=9 -mmt=on > $null
