@@ -9,7 +9,7 @@ param (
     #Optional parameters
     [Parameter()]
     #The default output folder is this
-    [String]$Output = "C:\Users\$env:USERNAME\Minecraft Backups\"
+    [String]$Output = "C:\Users\$env:USERNAME\Minecraft Backups"
     #Default file type for output backup is 7z
     # [String]$FileType = "7z"
 )
