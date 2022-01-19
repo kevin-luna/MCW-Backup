@@ -40,7 +40,7 @@ Write-Host -ForegroundColor Green "Compressing the World..."
 if(Test-Path "C:\Program Files\7-Zip\7z.exe"){
     #you can specify another path for 7zip installation
     Set-Alias -Name Compress -Value "C:\Program Files\7-Zip\7z.exe"
-    Compress a -t7z "$output_filename.7z" "$minecraft_worlds_folder\HqG5YEinEgA=" -mx=9 -mmt=on > $null
+    Compress a -t7z "$output_filename.7z" "$minecraft_worlds_folder\HqG5YEinEgA=" -mx=9 -mmt=on
 }else {
     Write-Host -ForegroundColor Yellow "7zip it's not installed, using Compress-Archive instead..."
     Compress-Archive -Path "$minecraft_worlds_folder\HqG5YEinEgA=" -DestinationPath "$output_filename.zip"
