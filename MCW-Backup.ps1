@@ -21,14 +21,19 @@ if($MinecraftVersion -eq "Bedrock"){
     exit
 }
 
-Set-Alias -Name 7zip -Value "C:\Program Files\7-Zip\7z.exe"
-
+#Check if 7zip its installed
+if(Test-Path "C:\Program Files\7-Zip\7z.exe"){
+    Set-Alias -Name Compress -Value "C:\Program Files\7-Zip\7z.exe"
+}else {
+    Write-Host -ForegroundColor Yellow "7zip it's not installed, using Compress-Archive instead..."
+    Set-Alias -Name Compress -Value Compress-Archive
+}
 
 $date =  Get-Date -Format "dd-MM-yyyy"
 $output_filename = "$Output\Pichichi-$date.7z"
 
 Write-Host -ForegroundColor Green "Compressing the World..."
-7zip a -t7z $output_filename "$minecraft_worlds_folder\HqG5YEinEgA=" -mx=9 -mmt=on > $null
+Compress a -t7z $output_filename "$minecraft_worlds_folder\HqG5YEinEgA=" -mx=9 -mmt=on > $null
 
 if($LASTEXITCODE -eq 0){
     Write-Host -ForegroundColor Green "Everything is ok"
