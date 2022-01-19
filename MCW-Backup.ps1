@@ -32,7 +32,7 @@ if($MinecraftVersion -eq "Bedrock"){
 # }
 
 
-$date =  Get-Date -Format "dd-MM-yyyy"
+$date =  Get-Date -Format "ddMMyyyy-HHmmss"
 $output_filename = "$Output\Pichichi-$date"
 Write-Host -ForegroundColor Green "Compressing the World..."
 
