@@ -94,7 +94,7 @@ param (
     
     if($LASTEXITCODE -eq 0){
         # Write-Host -ForegroundColor Green "Everything is ok"
-        Write-Host -ForegroundColor Green "The backup was created successfully!"
+        Write-Host -ForegroundColor Green "The backup was created successfully at $OutputFolder!"
     }else{
         Write-Error "The backup couldnt be created"
     }
