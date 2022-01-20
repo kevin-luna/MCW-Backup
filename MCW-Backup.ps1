@@ -10,7 +10,8 @@ param (
     #Optional parameters
     [Parameter()]
     #The default output folder is this
-    [String]$Output = "C:\Users\$env:USERNAME\Minecraft Backups"
+    [String]$Output = "C:\Users\$env:USERNAME\Minecraft Backups",
+    [Switch]$BackupAll
     #Default file type for output backup is 7z
     # [String]$FileType = "7z"
 )
@@ -26,22 +27,27 @@ if($MinecraftVersion -eq "Bedrock"){
 #The option for change the output file format its pendient
 # #Select file output type if it's not default
 # if(($FileType -ne "7z") -or ($FileType -ne "zip") -or ($FileType -ne "gzip") -or ($FileType -ne "bzip2") -or ($FileType -ne "tar")){
-
 # }
-
 
 $date =  Get-Date -Format "ddMMyyyy-HHmmss"
 $output_filename = "$Output\Pichichi-$date"
 Write-Host -ForegroundColor Green "Compressing the World..."
 
+if($BackupAll){
+    $output_filename = "$Output\MyWorlds-$date"
+    $worldBkp = ""
+}else {
+    $worldBkp = "HqG5YEinEgA="
+}
+
 #Check if 7zip its installed
 if(Test-Path "C:\Program Files\7-Zip\7z.exe"){
     #you can specify another path for 7zip installation
     Set-Alias -Name Compress -Value "C:\Program Files\7-Zip\7z.exe"
-    Compress a -t7z "$output_filename.7z" "$minecraft_worlds_folder\HqG5YEinEgA=" -mx=9 -mmt=on
+    Compress a -t7z "$output_filename.7z" "$minecraft_worlds_folder\$worldBkp" -mx=9 -mmt=on
 }else {
     Write-Host -ForegroundColor Yellow "7zip it's not installed, using Compress-Archive instead..."
-    Compress-Archive -Path "$minecraft_worlds_folder\HqG5YEinEgA=" -DestinationPath "$output_filename.zip"
+    Compress-Archive -Path "$minecraft_worlds_folder\$worldBkp" -DestinationPath "$output_filename.zip"
 }
 
 
