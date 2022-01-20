@@ -4,6 +4,7 @@ param (
     
     #Mandatory parameters
     [Parameter(Mandatory)]
+    [ValidateSet("Bedrock","Java")]
     [String]$MinecraftVersion,
     
     #Optional parameters
@@ -19,9 +20,6 @@ if($MinecraftVersion -eq "Bedrock"){
     $minecraft_worlds_folder = "C:\Users\$env:USERNAME\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftWorlds"
 }elseif($MinecraftVersion -eq "Java"){
     $minecraft_worlds_folder = "C:\Users\Kevin\AppData\Roaming\.minecraft\saves"
-}else {
-    Write-Error "Minecraft version unrecognized, plase choose one of the follow: Bedrock, Java"
-    exit
 }
 
 
