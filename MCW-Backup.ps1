@@ -78,6 +78,7 @@ param (
     if($worldlist.ContainsKey($World)){
         $output_filename = "$OutputFolder\$World-$date"
         $worldBkp = $worldlist[$World]
+        Write-Host -ForegroundColor Green "The world $World was founded!"
     }
     
     Write-Host -ForegroundColor Green "Compressing the World..."
