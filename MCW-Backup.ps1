@@ -10,7 +10,7 @@ param (
     #Optional parameters
     [Parameter()]
     #The default output folder is this
-    [String]$Output = "C:\Users\$env:USERNAME\Minecraft Backups",
+    [String]$OutputFolder = "C:\Users\$env:USERNAME\Minecraft Backups",
     [Switch]$BackupAll,
     [String]$World
     #Default file type for output backup is 7z
@@ -62,21 +62,21 @@ param (
     }
 
     $date =  Get-Date -Format "ddMMyyyy-HHmmss"
-    $output_filename = "$Output\$World-$date"
+    $output_filename = "$OutputFolder\$World-$date"
     
     if($BackupAll){
-        $output_filename = "$Output\MyWorlds-$date"
+        $output_filename = "$OutputFolder\MyWorlds-$date"
         $worldBkp = $minecraft_worlds_folder
     }elseif($World -eq ""){
         do {
             $World = Read-Host -Prompt "Supply a world for the backup"
         } while ($World -eq "")
-        $output_filename = "$Output\$World-$date"
+        $output_filename = "$OutputFolder\$World-$date"
     }
     
     #Checks if exists a world with the name given
     if($worldlist.ContainsKey($World)){
-        $output_filename = "$Output\$World-$date"
+        $output_filename = "$OutputFolder\$World-$date"
         $worldBkp = $worldlist[$World]
     }
     
