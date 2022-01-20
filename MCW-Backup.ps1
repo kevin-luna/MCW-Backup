@@ -10,7 +10,7 @@ param (
     #Optional parameters
     [Parameter()]
     #The default output folder is this
-    [String]$OutputFolder = "C:\Users\$env:USERNAME\Minecraft Backups",
+    [System.IO.DirectoryInfo]$OutputFolder = "C:\Users\$env:USERNAME\Minecraft Backups",
     [Switch]$BackupAll,
     [String]$World
     #Default file type for output backup is 7z
@@ -85,10 +85,10 @@ param (
     if(Test-Path "C:\Program Files\7-Zip\7z.exe"){
         #you can specify another path for 7zip installation
         Set-Alias -Name Compress -Value "C:\Program Files\7-Zip\7z.exe"
-        Compress a -t7z "$output_filename.7z" "$worldBkp" -mx=9 -mmt=on
+        Compress a -t7z "$output_filename.7z" "$worldBkp" -mx=9 -mmt=on > $null
     }else {
         Write-Host -ForegroundColor Yellow "7zip it's not installed, using Compress-Archive instead..."
-        Compress-Archive -Path "$worldBkp" -DestinationPath "$output_filename.zip"
+        Compress-Archive -Path "$worldBkp" -DestinationPath "$output_filename.zip" > $null
     }
     
     if($LASTEXITCODE -eq 0){
