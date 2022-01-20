@@ -30,43 +30,48 @@ param (
     # if(($FileType -ne "7z") -or ($FileType -ne "zip") -or ($FileType -ne "gzip") -or ($FileType -ne "bzip2") -or ($FileType -ne "tar")){
     # }
     
-    $date =  Get-Date -Format "ddMMyyyy-HHmmss"
-    $output_filename = "$Output\Pichichi-$date"
-    Write-Host -ForegroundColor Green "Compressing the World..."
     function Get-WorldList{
-    
         # $worlds stores all the folder objects inside the $minecraft_worlds_folder
-        $worlds =  @(Get-ChildItem -Path $minecraft_worlds_folder -Attributes D)
+        $worlds =  @(Get-ChildItem -Path $minecraft_worlds_folder -Directory)
         # $worldlist stores only the name and full path of each world founded
         $worldlist = @{}
-    
         # Iterates over $worlds for each folder and adds and element to $worldlist
-        ForEach-Object -InputObject $worlds -Process {
+        foreach($item in $worlds) {
+            $folderName = $item.Name
             #The full path of the world folder
-            $worldFolder = $PSItem.FullName
-            #Reads the content of levelname.txt to get the world name
-            $worldName =  Get-Content "$worldFolder\levelname.txt"
-            $worldlist.Add($worldName,$worldFolder)
+            $folderFullPath = $item.FullName
+            if($MinecraftVersion -eq "Bedrock"){
+                #Reads the content of levelname.txt toget the world name
+                $worldName =  Get-Content -Path "$folderFullPath\levelname.txt"
+            }elseif ($MinecraftVersion -eq "Java"){
+                $worldName = $folderName
+            }
+            
+            $worldlist.Add($worldName,$folderFullPath)
         }
         $worldlist
     }
     
     Write-Host -ForegroundColor Yellow "Searching for worlds in the local folder..."
     $worldlist = Get-WorldList
-
+    
     # If no worlds are founded the script exit
     if($worldlist.Count -lt 1){
         Write-Error "No worlds were founded!"
         exit
     }
+
+    $date =  Get-Date -Format "ddMMyyyy-HHmmss"
+    $output_filename = "$Output\$World-$date"
     
     if($BackupAll){
         $output_filename = "$Output\MyWorlds-$date"
-        $worldBkp = ""
+        $worldBkp = $minecraft_worlds_folder
     }elseif($World -eq ""){
         do {
             $World = Read-Host -Prompt "Supply a world for the backup"
         } while ($World -eq "")
+        $output_filename = "$Output\$World-$date"
     }
     
     #Checks if exists a world with the name given
@@ -75,14 +80,15 @@ param (
         $worldBkp = $worldlist[$World]
     }
     
+    Write-Host -ForegroundColor Green "Compressing the World..."
     #Check if 7zip its installed
     if(Test-Path "C:\Program Files\7-Zip\7z.exe"){
         #you can specify another path for 7zip installation
         Set-Alias -Name Compress -Value "C:\Program Files\7-Zip\7z.exe"
-        Compress a -t7z "$output_filename.7z" "$minecraft_worlds_folder\$worldBkp" -mx=9 -mmt=on
+        Compress a -t7z "$output_filename.7z" "$worldBkp" -mx=9 -mmt=on
     }else {
         Write-Host -ForegroundColor Yellow "7zip it's not installed, using Compress-Archive instead..."
-        Compress-Archive -Path "$minecraft_worlds_folder\$worldBkp" -DestinationPath "$output_filename.zip"
+        Compress-Archive -Path "$worldBkp" -DestinationPath "$output_filename.zip"
     }
     
     if($LASTEXITCODE -eq 0){
