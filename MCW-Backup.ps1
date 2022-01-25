@@ -10,7 +10,7 @@ param (
     #Optional parameters
     [Parameter()]
     #The default output folder is this
-    [System.IO.DirectoryInfo]$OutputFolder = "C:\Users\$env:USERNAME\Minecraft Backups",
+    [System.IO.DirectoryInfo]$OutputFolder = "$HOME\Minecraft Backups",
     [Switch]$BackupAll,
     [String]$World,
     #Default file type for output backup is 7z
@@ -20,9 +20,9 @@ param (
 
     #Select Minecraft Version
     if($MinecraftVersion -eq "Bedrock"){
-        $minecraft_worlds_folder = "C:\Users\$env:USERNAME\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftWorlds"
+        $minecraft_worlds_folder = "$HOME\AppData\Local\Packages\Microsoft.MinecraftUWP_8wekyb3d8bbwe\LocalState\games\com.mojang\minecraftWorlds"
     }elseif($MinecraftVersion -eq "Java"){
-        $minecraft_worlds_folder = "C:\Users\$env:USERNAME\AppData\Roaming\.minecraft\saves"
+        $minecraft_worlds_folder = "$HOME\AppData\Roaming\.minecraft\saves"
     }
     
     
